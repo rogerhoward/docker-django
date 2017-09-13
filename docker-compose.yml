@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  db:
+    environment:
+      - DB_HOST='db'
+      - DB_PORT='5432'
+      - DB_USERNAME='postgres'
+      - DB_PASSWORD='postgres'
+      - DB_NAME='django'
+    image: postgres
+    volumes:
+      - ./_db:/var/lib/postgresql
+  app:
+    environment:
+      - DB_HOST='db'
+      - DB_PORT='5432'
+      - DB_USERNAME='postgres'
+      - DB_PASSWORD='postgres'
+      - DB_NAME='django'
+    build: app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    # command: sh -c './wait-for db:5432 -- python manage.py runserver 0.0.0.0:8000'
+    command: 'python manage.py runserver 0.0.0.0:8000'
+    volumes:
+      - ./code:/code
