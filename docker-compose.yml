@@ -1,29 +1,44 @@
-version: '3'
-
+version: '2'
+ 
 services:
-  db:
-    environment:
-      - DB_HOST='db'
-      - DB_PORT='5432'
-      - DB_USERNAME='postgres'
-      - DB_PASSWORD='postgres'
-      - DB_NAME='django'
-    image: postgres
+  web:
+    restart: always
+    build: ./web
+    expose:
+      - "8000"
     volumes:
-      - ./_db:/var/lib/postgresql
-  app:
-    environment:
-      - DB_HOST='db'
-      - DB_PORT='5432'
-      - DB_USERNAME='postgres'
-      - DB_PASSWORD='postgres'
-      - DB_NAME='django'
-    build: app
-    ports:
-      - "8000:8000"
+      - ./web/:/home/django/app
+    command: gunicorn --bind 0.0.0.0:8000 server:app
     depends_on:
-      - db
-    # command: sh -c './wait-for db:5432 -- python manage.py runserver 0.0.0.0:8000'
-    command: 'python manage.py runserver 0.0.0.0:8000'
+      - postgres
+    environment:
+      - FLASK_APP=server.py
+      - FLASK_DEBUG=1
+ 
+  nginx:
+    restart: always
+    build: ./nginx
+    ports:
+      - "80:80"
     volumes:
-      - ./code:/code
+      - /www/static
+    volumes_from:
+      - web
+    depends_on:
+      - web
+ 
+  data:
+    image: postgres:9.6
+    volumes:
+      - /var/lib/postgresql
+    command: "true"
+ 
+  postgres:
+    restart: always
+    build: ./postgresql
+    volumes_from:
+      - data
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
