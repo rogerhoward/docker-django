@@ -1,5 +1,30 @@
+Django
+
+psycopg2
+Werkzeug
 gunicorn
 requests
-Django
+
 click
 simplejson
+
+Pillow
+
+django-debug-toolbar
+django-extensions
+djangorestframework
+django-imagekit
+django-split-settings
+django-cleanup
+
+
+#djangorestframework-gis
+#django-map-widgets
+#django-filter
+
+#django-storages
+#django-ses-boto3 # https://github.com/anurag/django-ses-boto3
+#django-amazon-ses # https://github.com/azavea/django-amazon-ses
+#boto3
+#boto
+#awscli
