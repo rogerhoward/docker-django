@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return 'hello'
+    return 'well hello'
 
 #------------------------------------------------#
 # System status endpoints                        #

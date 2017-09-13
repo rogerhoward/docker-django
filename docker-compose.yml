@@ -7,13 +7,17 @@ services:
     expose:
       - "8000"
     volumes:
-      - ./web/:/home/django/app
+      - .:/home/django
+    working_dir: /home/django/
     command: gunicorn --bind 0.0.0.0:8000 server:app
     depends_on:
       - postgres
     environment:
       - FLASK_APP=server.py
       - FLASK_DEBUG=1
+    networks:
+      - frontend
+      - backend
  
   nginx:
     restart: always
@@ -26,6 +30,8 @@ services:
       - web
     depends_on:
       - web
+    networks:
+      - frontend
  
   data:
     image: postgres:9.6
@@ -42,3 +48,9 @@ services:
       - "5432"
     ports:
       - "5432:5432"
+    networks:
+      - backend
+
+networks:
+  frontend:
+  backend:
