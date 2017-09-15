@@ -17,6 +17,7 @@ django-imagekit
 django-split-settings
 django-cleanup
 
+Celery
 
 #djangorestframework-gis
 #django-map-widgets
